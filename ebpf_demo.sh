@@ -21,7 +21,7 @@ function eprint {
 function recreate_ebpf {
 	waituntil "oc delete project ebpf" "NotFound"; oc new-project ebpf > /dev/null 2>&1
 	eprint oc adm policy add-scc-to-user privileged -z default -n ebpf
-	MASTER=$(kubectl get nodes | grep master | awk '{ print $1 }'| head -n1)
+	MASTER=$(kubectl get nodes | awk '/master/ { print $1 }')
 }
 
 function header {
