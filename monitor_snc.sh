@@ -27,8 +27,8 @@ rpm -q bash-completion || sudo yum install bash-completion
 export KUBECONFIG=~/snc/crc-tmp-install-data/auth/kubeconfig
 export PATH=$PATH:~/snc/openshift-clients/linux/
 grep KUBECONFIG ~/.bashrc || echo "export LC_ALL=en_US.UTF-8; export KUBECONFIG=~/snc/crc-tmp-install-data/auth/kubeconfig; export PATH=$PATH:~/snc/openshift-clients/linux/; export PATH=\"${KREW_ROOT:-$HOME/.krew}/bin:$PATH\" ; alias lv=less" >> ~/.bashrc
-grep "oc completeion bash" ~/.bashrc || echo 'source <(oc completion bash)' >> ~/.bashrc
-grep "kubectl completeion bash" ~/.bashrc || echo 'source <(kubectl completion bash)' >>~/.bashrc
+grep "oc completion bash" ~/.bashrc || echo 'source <(oc completion bash)' >> ~/.bashrc
+grep "kubectl completion bash" ~/.bashrc || echo 'source <(kubectl completion bash)' >>~/.bashrc
 #kubectl get pods --all-namespaces
 #watch -n 2 "~/snc/openshift-clients/linux/oc get pods --all-namespaces | grep -v Running"
 watch -n 2 "oc get pods --all-namespaces | grep -v Running"

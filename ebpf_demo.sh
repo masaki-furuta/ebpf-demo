@@ -40,10 +40,10 @@ trap ctrl_c INT
 echo 
 header Cloning bpftrace:
 eprint git clone https://github.com/iovisor/bpftrace >/dev/null 2>&1 
-eprint cd bpftrace/tools/; git pull >/dev/null 2>&1
+eprint cd ~/bpftrace/tools/; git pull >/dev/null 2>&1
 recreate_ebpf
-eprint kubectl-trace run $MASTER -f capable.bt
 echo;read -t 10 -p "Show capabilities tracing:"
+eprint kubectl-trace run $MASTER -f capable.bt
 waituntil "kubectl logs -f $(oc get pods -A | awk '/kubectl/ { print $2}')" "CAP"
 recreate_ebpf
 echo;read -t 10 -p "Show vfs tracing:"
