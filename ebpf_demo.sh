@@ -59,15 +59,15 @@ eprint git clone https://github.com/iovisor/bpftrace
 eprint cd ~/bpftrace/tools/
 eprint ls -x \*.bt
 recreate_ebpf
-echo;read -t 10 -p "Show capabilities tracing:"
+echo;header "Show capabilities tracing:"; read -t 10
 eprint kubectl-trace run $MASTER -f capable.bt
 waituntil "kubectl logs -f $(oc get pods -A | awk '/kubectl/ { print $2}')" "CAP"
 recreate_ebpf
-echo;read -t 10 -p "Show vfs tracing:"
+echo;header "Show vfs tracing:"; read -t 10
 eprint kubectl-trace run $MASTER -f vfsstat.bt
 waituntil "kubectl logs -f $(oc get pods -A | awk '/kubectl/ { print $2}')" "vfs_"
 recreate_ebpf
-echo;read -t 10 -p "Show load avarage:"
+echo;header "Show load avarage:"; read -t 10
 eprint kubectl-trace run $MASTER -f loads.bt
 waituntil "kubectl logs -f $(oc get pods -A | awk '/kubectl/ { print $2}')" "load averages"
 
