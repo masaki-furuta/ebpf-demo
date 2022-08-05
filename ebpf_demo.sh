@@ -8,6 +8,7 @@ function waituntil {
 		echo -n .
 		sleep 1
 	done
+	sleep 1
 	echo
 	eval ${1}
 }
@@ -19,14 +20,27 @@ function eprint {
 }
 
 function recreate_ebpf {
-	waituntil "oc delete project ebpf" "NotFound"; oc new-project ebpf > /dev/null 2>&1
-	eprint oc adm policy add-scc-to-user privileged -z default -n ebpf
+	oc get project ebpf >/dev/null 2>&1 && 
+	{ header "Deleting an existing ebpf project"; 
+		waituntil "oc delete project ebpf" "NotFound"
+	}
+	header "Creating ebpf project"; 
+	eprint oc new-project ebpf 2>/dev/null;
+	header "Adding priviledge:"
+	eprint oc adm policy add-scc-to-user privileged -z default -n ebpf;
 	MASTER=$(kubectl get nodes | awk '/master/ { print $1 }')
 }
 
 function header {
+	red=$'\e[1;31m'
+	grn=$'\e[1;32m'
+	yel=$'\e[1;33m'
+	blu=$'\e[1;34m'
+	mag=$'\e[1;35m'
+	cyn=$'\e[1;36m'
+	end=$'\e[0m'
 	echo	
-	echo "$*"
+	printf "%s\n" "${red}$*${end}"
 }
 
 function ctrl_c { 
@@ -39,8 +53,11 @@ function ctrl_c {
 trap ctrl_c INT
 echo 
 header Cloning bpftrace:
-eprint git clone https://github.com/iovisor/bpftrace >/dev/null 2>&1 
-eprint cd ~/bpftrace/tools/; git pull >/dev/null 2>&1
+rm -rf ~/bpftrace; cd ~
+#eprint git clone https://github.com/iovisor/bpftrace 2>/dev/null 
+eprint git clone https://github.com/iovisor/bpftrace
+eprint cd ~/bpftrace/tools/
+eprint ls -x \*.bt
 recreate_ebpf
 echo;read -t 10 -p "Show capabilities tracing:"
 eprint kubectl-trace run $MASTER -f capable.bt
