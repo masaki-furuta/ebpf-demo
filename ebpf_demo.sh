@@ -54,21 +54,16 @@ trap ctrl_c INT
 echo 
 header Cloning bpftrace:
 rm -rf ~/bpftrace; cd ~
-#eprint git clone https://github.com/iovisor/bpftrace 2>/dev/null 
 eprint git clone https://github.com/iovisor/bpftrace
 eprint cd ~/bpftrace/tools/
 eprint ls -x \*.bt
 recreate_ebpf
 echo;header "Show capabilities tracing:"; read -t 10
 eprint kubectl-trace run $MASTER -f capable.bt
-#waituntil "kubectl logs -f $(oc get pods -A | awk '/kubectl/ { print $2}')" "CAP"
 waituntil "kubectl logs -f $(oc get pod -n ebpf --no-headers --sort-by '{.metadata.creationTimestamp}'| awk 'END{ print $1}')" "CAP"
-#recreate_ebpf
 echo;header "Show vfs tracing:"; read -t 10
 eprint kubectl-trace run $MASTER -f vfsstat.bt
-#waituntil "kubectl logs -f $(oc get pods -A | awk '/kubectl/ { print $2}')" "vfs_"
 waituntil "kubectl logs -f $(oc get pod -n ebpf --no-headers --sort-by '{.metadata.creationTimestamp}'| awk 'END{ print $1}')" "vfs_"
-#recreate_ebpf
 echo;header "Show load avarage:"; read -t 10
 eprint kubectl-trace run $MASTER -f loads.bt
 waituntil "kubectl logs -f $(oc get pod -n ebpf --no-headers --sort-by '{.metadata.creationTimestamp}'| awk 'END{ print $1}')" "load averages"
