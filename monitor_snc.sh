@@ -13,7 +13,7 @@ repo_gpgcheck=1
 gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
 EOF
 rpm -q kubelet kubeadm kubectl || \
-sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
+sudo yum install -y kubectl --disableexcludes=kubernetes
 kubectl-trace || \
 	{ set -x; cd "$(mktemp -d)" && \
 	       	OS="$(uname | tr '[:upper:]' '[:lower:]')" && \
