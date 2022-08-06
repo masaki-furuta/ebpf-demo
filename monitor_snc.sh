@@ -2,7 +2,6 @@
 
 
 test -f /etc/yum.repos.d/kubernetes.repo || \
-# cat <<EOF > /etc/yum.repos.d/kubernetes.repo
 sudo tee /etc/yum.repos.d/kubernetes.repo <<EOF
 [kubernetes]
 name=Kubernetes
@@ -15,13 +14,13 @@ EOF
 rpm -q kubelet kubeadm kubectl || \
 sudo yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 kubectl-trace || \
-	{ set -x; cd "$(mktemp -d)" && \
-	       	OS="$(uname | tr '[:upper:]' '[:lower:]')" && \
-	       	ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')" && \
-	       	KREW="krew-${OS}_${ARCH}" && \
-	       	curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz" && \
-	       	tar zxvf "${KREW}.tar.gz" && \
-	       	./"${KREW}" install krew ; export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" ; kubectl krew install trace; }
+    { set -x; cd "$(mktemp -d)" && \
+            OS="$(uname | tr '[:upper:]' '[:lower:]')" && \
+            ARCH="$(uname -m | sed -e 's/x86_64/amd64/' -e 's/\(arm\)\(64\)\?.*/\1\2/' -e 's/aarch64$/arm64/')" && \
+            KREW="krew-${OS}_${ARCH}" && \
+            curl -fsSLO "https://github.com/kubernetes-sigs/krew/releases/latest/download/${KREW}.tar.gz" && \
+            tar zxvf "${KREW}.tar.gz" && \
+            ./"${KREW}" install krew ; export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH" ; kubectl krew install trace; }
 
 rpm -q bash-completion || sudo yum install bash-completion
 export KUBECONFIG=~/snc/crc-tmp-install-data/auth/kubeconfig
@@ -29,6 +28,4 @@ export PATH=$PATH:~/snc/openshift-clients/linux/
 grep KUBECONFIG ~/.bashrc || echo "export LC_ALL=en_US.UTF-8; export KUBECONFIG=~/snc/crc-tmp-install-data/auth/kubeconfig; export PATH=$PATH:~/snc/openshift-clients/linux/; export PATH=\"${KREW_ROOT:-$HOME/.krew}/bin:$PATH\" ; alias lv=less" >> ~/.bashrc
 grep "oc completion bash" ~/.bashrc || echo 'source <(oc completion bash)' >> ~/.bashrc
 grep "kubectl completion bash" ~/.bashrc || echo 'source <(kubectl completion bash)' >>~/.bashrc
-#kubectl get pods --all-namespaces
-#watch -n 2 "~/snc/openshift-clients/linux/oc get pods --all-namespaces | grep -v Running"
 watch -n 2 "oc get pods --all-namespaces | grep -v Running"
