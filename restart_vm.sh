@@ -13,9 +13,9 @@ VM=$(sudo virsh list --all | awk '/crc-/ { print $2 }')
 if [[ $(sudo virsh domstate $VM | grep running) ]]; then
     header "Stopping VM:"
     sudo virsh destroy $VM
-    header "Starting VM:"
-    sudo virsh start $VM
 fi
+header "Starting VM:"
+sudo virsh start $VM
 
 header "Waiting on bootup:"
 waituntil "oc get clusterversion" "Cluster version is"
