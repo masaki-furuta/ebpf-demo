@@ -3,31 +3,31 @@
 function waituntil {
     echo
     echo "$ ${1}"
-    until ${1} 2>&1 | egrep -qi "${2}"; do
+    until ${1} 2>&1 | grep -Eqi "${2}"; do
         echo -n .
         sleep 1
     done
     sleep 1
     echo
-    eval ${1}
+    eval "${1}"
 }
 
 function waituntil2 {
     echo
     echo "$ ${1}"
     COUNT=${3}
-    while ${1} 2>/dev/null | egrep -qv "${2}"; do
+    while ${1} 2>/dev/null | grep -Eqv "${2}"; do
         if [[ ${NOW} -eq ${COUNT} ]]; then
             header "Maximum counts reached: ${COUNT}"
             return
         fi
         echo -n .
-        NOW=$((${NOW}+1))
+        NOW=$((NOW+1))
         sleep 1
     done
     sleep 1
     echo
-    eval ${1}
+    eval "${1}"
 }
 
 function eprint {
@@ -50,11 +50,11 @@ function recreate_ebpf {
 
 function header {
     red=$'\e[1;31m'
-    grn=$'\e[1;32m'
-    yel=$'\e[1;33m'
-    blu=$'\e[1;34m'
-    mag=$'\e[1;35m'
-    cyn=$'\e[1;36m'
+    #grn=$'\e[1;32m'
+    #yel=$'\e[1;33m'
+    #blu=$'\e[1;34m'
+    #mag=$'\e[1;35m'
+    #cyn=$'\e[1;36m'
     end=$'\e[0m'
     echo    
     printf "%s\n" "${red}$*${end}"
