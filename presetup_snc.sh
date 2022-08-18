@@ -28,7 +28,7 @@ sudo yum -y install git
 sudo yum -y install firewalld
 sudo systemctl enable firewalld --now
 sudo firewall-cmd --add-port=6443/tcp --permanent
-sudo firewall-cmd --add-rich-rule "rule service name="libvirt" reject" --permanent
+sudo firewall-cmd --add-rich-rule "rule service name=libvirt reject" --permanent
 sudo firewall-cmd --zone=libvirt --add-service=libvirt --permanent
 sudo firewall-cmd --zone=dmz --change-interface=tt0 --permanent
 sudo firewall-cmd --zone=dmz --add-service=libvirt --permanent

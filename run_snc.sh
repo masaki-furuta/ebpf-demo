@@ -19,6 +19,6 @@ export OKD_VERSION=4.10.0-0.okd-2022-07-09-073606
 export OKD_VERSION=4.10.0-0.okd-2022-06-10-131327
 export OPENSHIFT_PULL_SECRET_PATH="/tmp/pull_secret.json"
 
-cd ~/snc
+cd ~/snc || exit 1
 ./snc.sh
 #./createdisk.sh crc-tmp-install-data
