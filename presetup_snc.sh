@@ -1,6 +1,7 @@
 #!/bin/bash -xv
 
 sudo yum install systemd-timesyncd
+sudo systemctl enable systemd-timesyncd --now
 sudo timedatectl set-ntp true 
 sudo timedatectl timesync-status
 
