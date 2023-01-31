@@ -1,5 +1,9 @@
 #!/bin/bash -xv
 
+sudo yum install systemd-timesyncd
+sudo timedatectl set-ntp true 
+sudo timedatectl timesync-status
+
 sudo yum install libvirt-devel libvirt-daemon-kvm libvirt-client -y
 sudo systemctl enable --now libvirtd
 echo "net.ipv4.ip_forward = 1" | sudo tee /etc/sysctl.d/99-ipforward.conf
